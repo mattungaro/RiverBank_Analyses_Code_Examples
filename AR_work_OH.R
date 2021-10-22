@@ -179,7 +179,7 @@ pa_impact2_summary2 <- pa_impact2_summary %>% mutate(true_sum_lf = sum_lf1 + sum
 pa_impact2_summary2$true_sum_lf %>% sum()
 # checked with my excel spreadsheet- the numbers match.
 
-## 7th, summarise  by types of resources, District(?), HUC8, make sure to get linear ft and length, cow 1 and 2.---------------
+##Summarise  by types of resources, District(?), HUC8, make sure to get linear ft and length, cowardin 1 and 2.
 
 pa_summary <- pa_impact2_summary2 %>% dplyr::select(updated_huc8, cowardin = cow_class0, sum_LF = true_sum_lf, sum_AC = sum_ac1, count_permits)
 pa_summary <- pa_summary %>% mutate(simple_cow = ifelse(cowardin == "pal", "pal", ifelse(cowardin == "per"| cowardin == "unclass_riv"|cowardin == "int"|cowardin == "eph", "riv", NA)))
@@ -230,7 +230,7 @@ top <- full_join(desc_eph, desc_int, by = "huc")
 top <- full_join(top, desc_per, by = "huc")
 write_csv(top, "C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\pa\\pa_top_10_HUC_wo_mit_rqd.csv")
 
-## NOW ONLY RQD ##################
+## NOW FILTER FOR ONLY REQUIRED MITIGATION ##################
 
 
 pa_impact2_summary <- pa_impact_rqd %>% group_by(updated_huc8, cow_class0) %>% 
@@ -243,7 +243,7 @@ pa_impact2_summary2 <- pa_impact2_summary %>% mutate(true_sum_lf = sum_lf1 + sum
 pa_impact2_summary2$true_sum_lf %>% sum()
 # checked with my excel spreadsheet- the numbers match.
 
-## 7th, summarise  by types of resources, District(?), HUC8, make sure to get linear ft and length, cow 1 and 2.---------------
+## Summarise  by types of resources, HUC8, make sure to get linear ft and length, cow 1 and 2.
 
 pa_summary <- pa_impact2_summary2 %>% select(updated_huc8, cowardin = cow_class0, sum_LF = true_sum_lf, sum_AC = sum_ac1, count_permits)
 pa_summary <- pa_summary %>% mutate(simple_cow = ifelse(cowardin == "pal", "pal", ifelse(cowardin == "per"| cowardin == "unclass_riv"|cowardin == "int"|cowardin == "eph", "riv", NA)))
@@ -319,7 +319,7 @@ attempt1 <-
 write_sf(attempt1, "C://Users//Owner//Documents//RAships and Riggsbee Work//Data_Analysis_AR_8.12.21//pa//pa_impacts.shp")
 
 
-# 4a. DATA MODELING --- SKIPPED ###################################################
+# 4a. DATA MODELING - NOT NECESSARY HERE ###################################################
 
 # 5a. DATA EVALUATION ######################################
 
@@ -345,13 +345,13 @@ write_sf(hucs2, "C://Users//Owner//Documents//RAships and Riggsbee Work//Data_An
 
 ### STOPPPED HERE FOR IMPACTS ##################
 
-### NOW MITIGATION STARTS HERE ################
+### NOW MITIGATION DATA PREPARATION STARTS HERE ################
 
 library(sf)
 library(tidyverse)
 library(readr)
 
-# 2b.	DATA COLLECTION AND DATA UNDERSTANDING #########################################
+# 2.	DATA COLLECTION AND DATA UNDERSTANDING #########################################
 
 louis_huc <- read_sf('C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\pa\\shp\\louisville_hucs.shp')
 pitts_huc <- read_sf('C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\pa\\shp\\pittsburgh_hucs.shp')
@@ -391,60 +391,8 @@ myfiles = list.files(path=mydir, pattern="*.csv$", full.names=TRUE)
 # bind a list of csv files together and add a new naming variable
 pittsburgh_banks <- vroom(myfiles, delim =",",id = "pittsburgh")
 
-## FILTER, MUTATE, ARRANGE DATASET ##########################################
 
-
-
-# louis_huc <- read_sf('C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\pa\\shp\\louisville_hucs.shp')
-# pitts_huc <- read_sf('C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\pa\\shp\\pittsburgh_hucs.shp')
-# hunt_huc <- read_sf('C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\pa\\shp\\huntington_hucs.shp')
-# buff_huc <- read_sf('C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\pa\\shp\\buffalo_hucs.shp')
-# 
-# library(sf)
-# library(tidyverse)
-# library(readr)
-# 
-# 
-# setwd("C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\OH\\ledgers") 
-# # this is one above your folder. Replace with your information.
-# mydir = "Louisville_ledgers" 
-# #this is your folder. Replace with your information
-# myfiles = list.files(path=mydir, pattern="*.csv$", full.names=TRUE)
-# # bind a list of csv files together and add a new naming variable
-# library(vroom)
-# louisville_banks <- vroom(myfiles, delim =",",id = "louisville")
-# ## repeat
-# 
-# # this is one above your folder. Replace with your information.
-# mydir = "Huntington_ledgers" 
-# #this is your folder. Replace with your information
-# myfiles = list.files(path=mydir, pattern="*.csv$", full.names=TRUE)
-# # bind a list of csv files together and add a new naming variable
-# huntington_banks <- vroom(myfiles, delim =",",id = "huntington")
-# 
-# ##repeat
-# # this is one above your folder. Replace with your information.
-# mydir = "Buffalo_ledgers" 
-# #this is your folder. Replace with your information
-# myfiles = list.files(path=mydir, pattern="*.csv$", full.names=TRUE)
-# # bind a list of csv files together and add a new naming variable
-# buffalo_banks <- vroom(myfiles, delim =",",id = "buffalo")
-# 
-# ## repeat
-# # this is one above your folder. Replace with your information.
-# mydir = "Pittsburgh_ledgers" 
-# #this is your folder. Replace with your information
-# myfiles = list.files(path=mydir, pattern="*.csv$", full.names=TRUE)
-# # bind a list of csv files together and add a new naming variable
-# pittsburgh_banks <- vroom(myfiles, delim =",",id = "pittsburgh")
-# 
-# louisville_banks[,2:17] -> l
-# huntington_banks[,2:17]-> h
-# buffalo_banks[,2:17]-> b
-# pittsburgh_banks[,2:17]-> p
-# 
-
-# 3b. DATA PREPARATION #################################################################################
+# 3. DATA PREPARATION #################################################################################
 
 rbind(l, h, b, p) -> all_banks_pa
 
@@ -478,15 +426,17 @@ n_distinct(z2$Permit) #247 permits
 
 z3 <- all_banks_pa2 %>% filter(is.na(Permit))
 z4 <-  all_banks_pa2 %>% filter(!is.na(Permit))
-# Okay this works! 566 out of (566+34). I can live with this. If I can then match the ones without HUCs with 
+# Okay this works! 566 out of (566+34). If I can then match the ones without HUCs with 
 # impact permits, I should be good. 
 
 # So, z1 is what I need to get filtered through impacts to find out WHERE these permits are doing their thing
 
 rib_no_huc_permits <- unique(z1$Permit) # 225
-# bringing in test3
+# These mitigation permits have no HUC - which is my subwatershed and geographic area of concern. Therefore, I 
+# attempt to find approximately where the permits are based by comparing them to their corresponding 
+# impact permits.
 
-write_csv(all_impacts, "C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\all_impacts.csv")
+all_impacts <- read_csv("C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\all_impacts.csv")
 test4 <- all_impacts %>% filter(DA_NUMBER %in% rib_no_huc_permits)
 test5 <- n_distinct(test4$DA_NUMBER) # 46 out of 225
 
@@ -555,7 +505,7 @@ write_csv(HUC_fixed_filter, 'C:\\Users\\Owner\\Documents\\RAships and Riggsbee W
 ### NOW WORK IN EXCEL TO CREATE A TABLE BASED ON COWARDIN CLASSES ##############################
 
 ### NOW COMBINE WITH HUC SHAPEFILE AND EXPORT TO QGIS ###################################
-hucs <- read_sf("C://Users//Owner//Documents//RAships and Riggsbee Work//Data_Analysis_AR_8.12.21//OH//top_hucs_for_wdrs.shp")
+hucs <- read_sf("C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\OH\\top_hucs_for_wdrs.shp")
 wdr <- read_csv("C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\OH\\huc_summary_filtered.csv")
 
 wdr = wdr %>% mutate(huc = `Row Labels`)
@@ -563,7 +513,7 @@ shp = left_join(hucs, wdr , by = "huc")
 
 write_sf(shp, "C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\OH\\wdr_study_area_hucs.shp")
 
-### NOW GET THE INIT AND REL ######################
+### NOW GET THE INIT AND REL CREDITS (INITAL AND RELEASED CREDITS - SUPPLY OF CREDITS) ######################
 library(magrittr)
 library(tidyverse)
 library(sf)
@@ -624,16 +574,13 @@ x = oh_banks_init %>% group_by(`Credit Classification`, bank) %>% summarise(sum(
 y = oh_banks_rel %>% group_by(`Credit Classification`, bank) %>% summarise(sum(rel_credits, na.rm = T))
 
 
-
-
 write_csv(x, 'C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\OH\\OH_RIBITS_init_fixed.csv')
-
 write_csv(y, 'C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\OH\\OH_RIBITS_rel_fixed.csv')
-x =read_csv('C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\OH\\OH_RIBITS_init_fixed.csv')
-y =read_csv('C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\OH\\OH_RIBITS_rel_fixed.csv')
+x2 =read_csv('C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\OH\\OH_RIBITS_init_fixed.csv')
+y2 =read_csv('C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\OH\\OH_RIBITS_rel_fixed.csv')
 
-full_join(x, y, by = "bank")
-z = full_join(x, y, by = c("bank", "Credit Classification"))
+full_join(x2, y2, by = "bank")
+z = full_join(x2, y2, by = c("bank", "Credit Classification"))
 z <- z %>% mutate(remaining_credits = `sum(init_credits, na.rm = T)` - `sum(rel_credits, na.rm = T)`)
 write_csv(z, 'C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_AR_8.12.21\\OH\\OH_RIBITS_init_rel.csv')
 
