@@ -1,4 +1,10 @@
 
+## This was the first project that I worked on for RiverBank.
+## We estimated how many linear feet of intermittent and ephermal streams that
+## developers from 2010-2015 had impacted, which, under
+## the Trump Administration's new mitigation policy, 
+## would continue without previous mtigation requirements.
+
 library(tidyverse)
 icc2 <- read_csv("C:\\Users\\Owner\\Documents\\RAships and Riggsbee Work\\Data_Analysis_Adam_Riggsbee\\ICC_RBC_eph_int_per.csv")
 
